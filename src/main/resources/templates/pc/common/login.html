@@ -1,0 +1,60 @@
+<meta charset="UTF-8" />
+
+<div class="tit-t1">
+	<span class="fl w1">用户通道</span>
+</div>
+
+<script>
+$(function(){
+	$("#name").focus();
+});
+
+function go_login() {
+	
+	var name = $("#name").val();
+	var password = $("#password").val();
+	
+	if (name == null || name == "") {
+		alert('请输入帐号!');
+		return;
+	}
+	if (password == null || password == "") {
+		alert('请输入密码!');
+		return;
+	}
+	
+	$.post('/api/member/login', {
+		name : name,
+		pwd : password
+	}, function(result) {
+		if (result.success) {
+			window.location.href = "/index";
+		} else {
+			alert(result.msg);
+		}
+	}, 'json');
+}
+</script>
+
+
+<div class="dw" style="height: 115px">
+	<div class="login1">
+		<div  onsubmit="return checkfrmlogin(this)"
+		method="post" name="form1">
+		<div class="f-l pl-20">
+			帐号&nbsp;&nbsp;<input name="Username" id="name"
+				class="border2" type="text" size="15"><br>
+			密码&nbsp;&nbsp;<input name="PassWord" id="password"
+				class="border2" type="password" size="15" style="width: 80px;"  onkeydown="if(event.keyCode==13) go_login()">
+			</div>
+			<div class="f-r  pr-20">
+				<input type="image"  onclick="go_login()"  src="/image/loginn.jpg" value="登录">
+			</div>
+		</div>
+	</div>
+	
+	<div align="center" class="more2">
+		<a href="/member/reg" target="_blank">用户注册</a>  
+	</div>
+						
+</div>			

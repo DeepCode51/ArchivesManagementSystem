@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+<meta charset="UTF-8">
+<title th:text=${title}></title>
+
+<div th:include="/common/layui"></div>
+<div th:include="/common/jq"></div>
+
+<!--添加 vue  支持加载-->
+<script src="/vue/vue.min.js"></script>
+<!--添加 vue  支持加载-->
+<script>
+
+$(function(){
+	$("#daohang").find("#home").addClass("active");
+});
+
+</script>
+<style>
+/*修改table表格  左右内边框 为0*/
+.layui-table-cell {
+	padding-left: 0px;
+	padding-right: 0px;
+	text-align: center;
+}
+/*修改table表格 左右内边框 为0*/
+</style>
+<style>
+body{
+	background: url(/image/base/home_bg.png) no-repeat center top fixed;
+}
+.item{
+	flex:1;
+	-webkit-flex:1; 
+	text-align: center; 
+	line-height: 45px;
+}
+.item a:hover{
+	color: red;
+}
+.active{
+	color: red;
+}
+</style>
+</head>
+
+<body id="app">
+	<div style="width: 1100px; margin: 0 auto; margin-top: 20px;">
+	
+		<div th:include="/pc/student/common/top.html"  style="width: 100%;  overflow: hidden; ">
+		</div>
+	 	
+		<div id="daohang" th:include="/pc/student/common/daohang.html"  style="width: 100%; height:45px; border-radius: 10px; margin-top:22px; background-color: white;display: flex;display: -webkit-flex; ">
+		</div>
+		<div style="width: 100%; margin-top:22px; border-radius: 10px;  min-height: 500px; ">
+			<!-- 内容展示区域 -->
+			
+			<div class="layui-card">
+		        <div class="layui-card-header">个人资料</div>
+		        <div class="layui-card-body" style="min-height: 300px; ">
+					
+					<div class="layui-form" style="width: 500px;">
+					  <table class="layui-table">
+					    <colgroup>
+					      <col width="120">
+					      <col>
+					    </colgroup>
+					    <tbody>
+					      <tr>
+					        <td>用户名</td>
+					        <td th:text="${session.currentUser.name}"> </td>
+					      </tr>
+					      <tr>
+					        <td>姓名</td>
+					        <td th:text="${session.currentUser.trueName}"></td>
+					      </tr>
+					      <tr>
+					        <td>性别</td>
+					        <td th:if="${session.currentUser.sex==1}">男</td>
+					        <td th:if="${session.currentUser.sex==2}">女</td>
+					      </tr>
+					      <tr>
+					        <td>电话</td>
+					        <td th:text="${session.currentUser.phone}"> </td>
+					      </tr>
+					      <tr>
+					        <td>职务</td>
+					        <td>学生</td>
+					      </tr>
+					      </tbody>
+					      </table>
+					</div>
+					
+					<a href="/student/edit"  class="layui-btn">修改资料</a>
+					
+		        </div>
+		      </div>
+			
+			<!-- 内容展示区域 -->
+		</div>
+	</div>
+</body>
+
+<script type="text/html" id="format_type">
+{{#  if(d.type){ }}
+{{ d.type.name}}
+{{#  } else  {  }}
+{{#  }   }}
+</script>
+
+<script type="text/html" id="format_state">
+{{#  if(d.state==1){ }}
+ 维修中
+{{#  } else if(d.state==2)  {  }}
+正常
+{{#  }  else if(d.state==3){  }}
+报废
+{{#  } else if(d.state==4){    }}
+使用中
+{{#  }      }}
+</script>
+
+<script type="text/html" id="table_bar">
+<div class="layui-btn-group">
+{{#  if(d.state == 2){ }}
+<a class="layui-btn layui-btn-xs" lay-event="use">使用</a>
+{{#  } }}
+</div>
+</script>
+
+<script>
+layui.use([ 'laydate', 'laypage', 'layer', 'table', 'carousel',
+		'upload', 'element' ], function() {
+	var laydate = layui.laydate //日期
+	, laypage = layui.laypage //分页
+	,layer = layui.layer //弹层
+	,form = layui.form 
+	, table = layui.table //表格
+	, carousel = layui.carousel //轮播
+	, upload = layui.upload //上传
+	, element = layui.element; //元素操作
+	  table.render({
+	    elem: '#table'
+	    ,url: '/admin/charge/list'
+	    ,height: 'full-300'
+	    ,totalRow: true
+		,cols: [ [
+	       {checkbox: true, fixed: true}
+	       ,{field:'sort', title: '排序', width:90,style:'font-size: 12px;'   }
+	       ,{field:'type', title: '充电桩类型', width:120,style:'font-size: 12px;',templet: '#format_type' }
+	       ,{field:'name', title: '充电桩名称', width:120,style:'font-size: 12px;' }
+	       ,{field:'state', title: '充电桩状态', width:120,style:'font-size: 12px;',templet: '#format_state' }
+	       ,{field:'price', title: '每小时收费', width:80,style:'font-size: 12px;' }
+	       ,{field:'createDateTime', title: '创建时间', width:150,style:'font-size: 12px;'  }
+	       ,{fixed:'right', width:120,title: '操作',  toolbar: '#table_bar'}
+	       ] ]
+	    ,id: 'table'
+	    ,page: true
+	    ,limits:[500,1000,2000,3000],
+	   limit:100
+	  });
+	
+	//监听工具条 table_bar
+		table.on('tool(table)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			var data = obj.data //获得当前行数据
+			, layEvent = obj.event; //获得 lay-event 对应的值
+			if (layEvent === 'use') {
+				use(data.id);
+			} 
+		});
+});
+</script>
+
+<script>
+	var app = new Vue({
+		el : '#app',
+		data : {
+		}
+	});
+</script>
+</html>

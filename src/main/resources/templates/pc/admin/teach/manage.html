@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+<meta charset="UTF-8">
+<title th:text=${title}></title>
+
+<div th:include="/common/layui"></div>
+<div th:include="/common/jq"></div>
+
+<script src="/js/houtai/manage_base.js"></script>
+
+<!--添加 vue  支持加载-->
+<script src="/vue/vue.min.js"></script>
+<!--添加 vue  支持加载-->
+<style>
+/*修改table表格  左右内边框 为0*/
+.layui-table-cell {
+	padding-left: 0px;
+	padding-right: 0px;
+	text-align: center;
+}
+/*修改table表格 左右内边框 为0*/
+</style>
+
+<script>
+//定义在外面。可以代码中  使用 table
+var table;
+layui.use([ 'laydate', 'laypage', 'layer','form', 'table', 'carousel',
+			'upload', 'element' ], function() {
+	table = layui.table;
+});
+
+$(function(){
+	$("#daohang").find("#shezhang").addClass("active");
+});
+
+var global_ids;
+var global_ids_len;
+
+var w ;//窗口的宽
+var h ;//窗口的高
+
+//添加
+function add(){
+	w = 400;
+	h = 600;
+	checkWindow();
+	//iframe层
+	layer.open({
+	  type: 2,
+	  title: '添加',
+	  shadeClose: false,
+	  shade: 0.8,
+	  area: [w+'px', h+'px'],
+	  content: '/page/teach/add' //iframe的url
+	});
+}
+
+//打开编辑窗口
+function edit(id){
+	w = 400;
+	h = 600;
+	checkWindow();
+	layer.open({
+	  type: 2,
+	  title: '修改',
+	  shadeClose: false,
+	  shade: 0.8,
+	  area: [w+'px', h+'px'],
+	  content: '/page/teach/edit?id='+id //iframe的url
+	});
+}
+
+function set_new_pwd(id){
+	w = 600;
+	h = 500;
+	checkWindow();
+	layer.open({
+	  type: 2,
+	  title: '设置新密码',
+	  shadeClose: false,
+	  shade: 0.8,
+	  area: [w+'px', h+'px'],
+	  content: '/page/teach/set_new_pwd?id='+id //iframe的url
+	});
+}
+
+
+//子窗口调用 的  关闭窗口方法 
+function closeDlg(msg){
+	 layer.closeAll();
+	 layer.msg(msg);
+	 reload_data();
+}
+
+//相当前刷新  重新加载
+function reload_data(){
+	table.reload('table', {
+		where: {},page: {curr: 1 //重新从第 1 页开始
+				}
+	});
+}
+
+function del(ids){
+	var index = layer.load(1, {
+		  shade: [0.1,'#fff'] //0.1透明度的白色背景
+	});
+	$.post('/api/user/delete',{ids:ids},function(result){
+		if(result.success){
+			layer.closeAll();
+			layer.msg('删除成功');
+			reload_data();
+		}else{
+			layer.closeAll();
+			layer.msg(result.msg);
+		}
+	},'json');
+}
+
+
+</script>
+<style>
+body{
+	background: url(/image/base/home_bg.png) no-repeat center top fixed;
+}
+.item{
+	flex:1;
+	-webkit-flex:1; 
+	text-align: center; 
+	line-height: 45px;
+}
+.item a:hover{
+	color: red;
+}
+.active{
+	color: red;
+}
+</style>
+</head>
+
+<body id="app">
+	<div style="width: 1100px; margin: 0 auto; margin-top: 20px; margin-bottom: 100px;">
+		
+		<div th:include="/pc/admin/common/top.html"  style="width: 100%;  overflow: hidden; ">
+		</div>
+		
+		<div id="daohang" th:include="/pc/admin/common/daohang.html"  style="width: 100%; height:45px; border-radius: 10px; margin-top:22px; background-color: white;display: flex;display: -webkit-flex; ">
+		</div>
+		<div style="width: 100%; margin-top:22px; border-radius: 10px;  min-height: 500px; ">
+			<!-- 内容展示区域 -->
+			
+			<div class="layui-card">
+		        <div class="layui-card-header" th:text=${title}>卡片面板</div>
+		        <div class="layui-card-body" style="min-height: 300px;">
+					  <div class="layui-table-toolbar" style="margin-bottom: 3px; ">
+							<div class="layui-btn-group">
+								<button onclick="add()"  class="layui-btn layui-btn-sm"><i class="layui-icon">&#xe654;</i>添加</button>
+								<button onclick="delSelected()" class="layui-btn layui-btn-sm layui-btn-danger"><i class="layui-icon">&#xe640;</i>删除</button>
+							    <button class="layui-btn layui-btn-sm" onclick="reload_data()"><i class="layui-icon">&#xe669;</i>刷新</button>
+						 	 </div>
+						</div>
+						<table class="layui-hide"   id="table" lay-filter="table"></table>
+		        </div>
+		      </div>
+      
+			<!-- 内容展示区域 -->
+		</div>
+	</div>
+</body>
+
+<script type="text/html" id="table_bar">
+<div class="layui-btn-group">
+<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+	<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="set_new_pwd">修改密码</a>
+</div>
+</script>
+<script type="text/html" id="format_sex">
+{{#  if(d.sex==1){ }}
+男
+{{#  } else{   }}
+ 女
+{{#   }  }}
+</script>
+
+<script type="text/html" id="format_state">
+{{#  if(d.state==1){ }}
+管理员
+{{#  } else if(d.state==2){   }}
+教师
+{{#  } else if(d.state==3){   }}
+学生
+{{#   }  }}
+</script>
+
+<script>
+layui.use([ 'laydate', 'laypage', 'layer', 'table', 'carousel',
+		'upload', 'element' ], function() {
+	var laydate = layui.laydate //日期
+	, laypage = layui.laypage //分页
+	,layer = layui.layer //弹层
+	,form = layui.form 
+	, table = layui.table //表格
+	, carousel = layui.carousel //轮播
+	, upload = layui.upload //上传
+	, element = layui.element; //元素操作
+	  table.render({
+	    elem: '#table'
+	    ,url: '/api/user/list?state=2'
+	    ,height: 'full-400'
+	    ,totalRow: true
+		,cols: [ [
+	       {checkbox: true, fixed: true}
+	       ,{field:'name', title: '用户名', width:90,style:'font-size: 12px;'   }
+	       ,{field:'state', title: '用户类型', width:120,style:'font-size: 12px;' ,templet: '#format_state' }
+	       
+	       ,{field:'trueName', title: '姓名', width:120,style:'font-size: 12px;'  }
+	       
+	       ,{field:'sex', title: '性别', width:120,style:'font-size: 12px;',templet: '#format_sex' }
+	       ,{field:'phone', title: '电话', width:120,style:'font-size: 12px;'  }
+	       
+	       ,{field:'createDateTime', title: '创建时间', width:150,style:'font-size: 12px;'  }
+	       ,{field:'remark', title: '备注', width:90,style:'font-size: 12px;'   }
+
+	       ,{fixed:'right', width:120,title: '操作',  toolbar: '#table_bar'}
+	       ] ]
+	    ,id: 'table'
+	    ,page: true
+	    ,limits:[500,1000,2000,3000],
+	   limit:100
+	  });
+	
+	//监听工具条 table_bar
+		table.on('tool(table)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			var data = obj.data //获得当前行数据
+			, layEvent = obj.event; //获得 lay-event 对应的值
+			if (layEvent === 'edit') {
+				edit(data.id);
+			} else if(layEvent === 'set_new_pwd'){
+				set_new_pwd(data.id);
+			}
+		});
+});
+</script>
+
+</html>

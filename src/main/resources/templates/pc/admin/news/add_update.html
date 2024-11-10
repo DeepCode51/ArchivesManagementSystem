@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+<meta charset="UTF-8">
+<title th:text=${title}></title>
+
+<div th:include="/common/layui"></div>
+<div th:include="/common/jq"></div>
+
+<script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js"> </script>
+<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+<script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+
+<!--添加 vue  支持加载-->
+<script src="/vue/vue.min.js"></script>
+<!--添加 vue  支持加载-->
+<script>
+
+var save_url = '[[${save_url}]]';
+function save() {
+	var index = layer.msg('提交中，请稍候', {
+		icon : 16,
+		time : false,
+		shade : 0.8
+	});
+	
+	app.content = UE.getEditor('editor').getContent();
+	
+	$.post(save_url, {title : app.title ,content : app.content 
+	}, function(result) {
+		if (result.success) {
+			if(result.btn_disable){
+				$("#save").attr("onclick","void();"); 
+				$("#save").text(result.msg); 
+				//询问框
+				layer.confirm(result.msg, {
+				  btn: ['好','我知道了'] //按钮
+				}, function(){
+					layer.closeAll();
+				}, function(){
+					layer.closeAll();
+				});
+				//询问框
+			}else{
+				layer.msg(result.msg, {icon: 1});
+			}
+			
+		} else {
+			layer.closeAll();//关闭loading
+			layer.msg(result.msg);
+		}
+	}, 'json');
+}
+</script>
+<style>
+/*修改table表格  左右内边框 为0*/
+.layui-table-cell {
+	padding-left: 0px;
+	padding-right: 0px;
+	text-align: center;
+}
+/*修改table表格 左右内边框 为0*/
+</style>
+<style>
+body{
+	background: url(/image/base/home_bg.png) no-repeat center top fixed;
+}
+.item{
+	flex:1;
+	-webkit-flex:1; 
+	text-align: center; 
+	line-height: 45px;
+}
+.item a:hover{
+	color: red;
+}
+.active{
+	color: red;
+}
+</style>
+</head>
+
+<body id="app">
+	<div style="width: 1100px; margin: 0 auto; margin-top: 20px;  margin-bottom: 100px;">
+		
+		
+<div th:include="/pc/admin/common/top.html"  style="width: 100%;  overflow: hidden; ">
+</div>
+		
+		<div id="daohang" th:include="/pc/admin/common/daohang.html"  style="width: 100%; height:45px; border-radius: 10px; margin-top:22px; background-color: white;display: flex;display: -webkit-flex; ">
+		</div>
+		<div style="width: 100%; margin-top:22px; border-radius: 10px;  min-height: 500px; ">
+			<!-- 内容展示区域 -->
+			
+			<div class="layui-card">
+		        <div class="layui-card-header" th:text=${title}>卡片面板</div>
+		        <div class="layui-card-body" style="min-height: 300px;">
+					 <div  class="layui-form layui-form-pane" action="">
+					  <div class="layui-form-item">
+					    <label class="layui-form-label">新闻标题</label>
+					    <div class="layui-input-block">
+					      <input type="text" v-model="title" th:value="${news?.title}" autocomplete="off" placeholder="请输入  新闻标题" class="layui-input">
+					    </div>
+					  </div>
+					  
+					  
+					  <style>
+					.edui-editor {
+					z-index: 1  !important;}
+					</style>
+					<div class="layui-form-item layui-form-text">
+						<label class="layui-form-label">新闻内容</label>
+						<div class="layui-input-block">
+							<script id="editor" name="content" type="text/plain"
+								style="width:100%;height:600px; "></script>
+						</div>
+					</div>
+				
+				<div class="layui-form-item">
+					<div class="layui-input-block" style="margin-left: 0px;">
+						<button id="save" onclick="save()" class="layui-btn" th:text="${btn_text}"></button>
+					</div>
+				</div>
+				
+				
+					  
+					  </div>
+			  
+		        </div>
+		      </div>
+      
+			<!-- 内容展示区域 -->
+		</div>
+	</div>
+</body>
+
+<!-- 实例化百度编辑器 -->
+<script type="text/javascript">
+var ue = UE.getEditor('editor');
+UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+UE.Editor.prototype.getActionUrl = function(action) {
+	console.log(action);
+	// uploadscrawl 涂鸦上传 上传的是，base64 码。
+	// uploadfile  文件 上传
+	// uploadvideo 视频 上传
+    if (action == 'uploadimage' || action == 'uploadimage') {
+    	//图片上传
+        return '/ueditor/uploadimage'; 
+    } else if(action == 'uploadfile'){
+    	//文件上传
+    	return '/ueditor/uploadfile';
+    }else if(action == 'uploadscrawl'){
+    	// uploadscrawl 涂鸦上传 上传的是，base64 码。
+    	return '/ueditor/uploadscrawl';
+    }else if(action == 'uploadvideo'){
+    	// uploadvideo 视频 上传
+    	return '/ueditor/uploadvideo';
+    }else if(action == 'catchimage'){
+    	//远程 图片
+    	return '/ueditor/catchimage';
+    }else{
+    	 return this._bkGetActionUrl.call(this, action);
+    }
+}
+</script>
+<!-- 实例化百度编辑器 -->
+
+
+<script th:if="${#bools.isTrue(isEdit)}">
+ ue.addListener("ready",function(){
+ 	// 通过ajax请求数据
+ 	UE.ajax.request("/api/news/findById",
+ 			{
+ 				method:"post",
+ 				async:false,
+ 				data:{"id":[[${news.id}]]},
+ 				onsuccess:function(result){
+ 					result=eval("("+result.responseText+")");
+ 					UE.getEditor('editor').setContent(result.content);
+ 				}
+			});
+ });
+ </script>
+ 
+ 
+
+
+
+<script>
+layui.use([ 'laydate', 'laypage', 'layer', 'table', 'carousel',
+		'upload', 'element' ], function() {
+	var laydate = layui.laydate //日期
+	, laypage = layui.laypage //分页
+	,layer = layui.layer //弹层
+	,form = layui.form 
+	, table = layui.table //表格
+	, carousel = layui.carousel //轮播
+	, upload = layui.upload //上传
+	, element = layui.element; //元素操作
+});
+</script>
+
+<script>
+var app = new Vue({
+	el : '#app',
+	data : {}
+});
+</script>
+
+</html>

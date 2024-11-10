@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title th:text="${title}"></title>
+
+<div th:include="/common/layui"></div>
+<div th:include="/common/jq"></div>
+
+<!--添加 vue  支持加载-->
+<script src="/vue/vue.min.js"></script>
+<!--添加 vue  支持加载-->
+
+<style>
+.layui-form-item {
+	margin-bottom: 3px;
+}
+</style>
+
+</head>
+<script>
+
+var save_url = '[[${save_url}]]';
+function save() {
+	var index = layer.msg('提交中，请稍候', {
+		icon : 16,
+		time : false,
+		shade : 0.8
+	});
+	
+	$.post(save_url, {pwd:app.pwd
+	}, function(result) {
+		if (result.success) {
+			window.parent.closeDlg(result.msg);
+		} else {
+			layer.msg(result.msg);
+		}
+	}, 'json');
+}
+
+</script>
+<body id="app">
+	<div style="padding: 10px;" class="layui-form layui-form-pane" action="">
+		
+		<div  class="layui-form-item">
+			<label class="layui-form-label">新密码</label>
+			<div class="layui-input-block">
+				<input type="password"  v-model="pwd"   autocomplete="off"
+					placeholder="请输入  新密码" class="layui-input">
+			</div>
+		</div>
+		
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" th:text="${btn_text}"  lay-submit="" lay-filter="demo1"
+					onclick="save()"></button>
+			</div>
+		</div>
+		
+	</div>
+</body>
+
+<script th:inline="none">
+	layui.use([ 'laydate', 'laypage', 'layer', 'table', 'carousel', 'upload',
+			'element' ], function() {
+		var laydate = layui.laydate //日期
+		, laypage = layui.laypage //分页
+		, layer = layui.layer //弹层
+		, table = layui.table //表格
+		, carousel = layui.carousel //轮播
+		, upload = layui.upload //上传
+		, element = layui.element; //元素操作
+		
+	});
+</script>
+
+<script>
+	var app = new Vue({
+		el : '#app',
+		data : {
+		}
+	});
+</script>
+</html>

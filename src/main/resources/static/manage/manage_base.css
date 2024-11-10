@@ -1,0 +1,6 @@
+
+/* 修改管理页面  左边的复选框 有点靠上 */
+.layui-table-cell .layui-form-checkbox[lay-skin=primary] {
+    top: 4px;
+}
+/* 修改管理页面  左边的复选框 有点靠上 */

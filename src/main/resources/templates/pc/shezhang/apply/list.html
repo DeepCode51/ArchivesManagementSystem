@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+<meta charset="UTF-8">
+<title th:text=${title}></title>
+
+<div th:include="/common/layui"></div>
+<div th:include="/common/jq"></div>
+
+
+<script src="/js/houtai/manage_base.js"></script>
+
+<!--添加 vue  支持加载-->
+<script src="/vue/vue.min.js"></script>
+<!--添加 vue  支持加载-->
+<script>
+//定义在外面。可以代码中  使用 table
+var table;
+layui.use([ 'laydate', 'laypage', 'layer','form', 'table', 'carousel',
+			'upload', 'element' ], function() {
+	table = layui.table;
+});
+
+$(function(){
+	
+	$("#daohang").find("#association_sq_manage").addClass("active");
+});
+
+function view(id){
+	window.location.href = '/student/association/view?id='+id;
+}
+
+function adopt(applyId){
+	layer.confirm('是否操作通过？', {
+	  btn: ['是','返回'] //按钮
+	}, function(){
+		$.post("/api/apply/adopt", {applyId:applyId}, function(result) {
+			layer.closeAll();
+			if (result.success) {
+				reload_data();
+				layer.msg(result.msg);
+			} else {
+				layer.msg(result.msg);
+			}
+		}, 'json');
+		
+	}, function(){
+		layer.msg('已返回');
+	});
+}
+
+function refuse(applyId){
+	layer.confirm('是否操作驳回？', {
+		  btn: ['是','返回'] //按钮
+		}, function(){
+			$.post("/api/apply/refuse", {applyId:applyId}, function(result) {
+				layer.closeAll();
+				if (result.success) {
+					reload_data();
+					layer.msg(result.msg);
+				} else {
+					layer.msg(result.msg);
+				}
+			}, 'json');
+			
+		}, function(){
+			layer.msg('已返回');
+		});
+}
+
+
+//相当前刷新  重新加载
+function reload_data(){
+	table.reload('table', {
+		where: {},page: {curr: 1 //重新从第 1 页开始
+				}
+	});
+}
+</script>
+<style>
+/*修改table表格  左右内边框 为0*/
+.layui-table-cell {
+	padding-left: 0px;
+	padding-right: 0px;
+	text-align: center;
+}
+/*修改table表格 左右内边框 为0*/
+</style>
+<style>
+body{
+	background: url(/image/base/home_bg.png) no-repeat center top fixed;
+}
+.item{
+	flex:1;
+	-webkit-flex:1; 
+	text-align: center; 
+	line-height: 45px;
+}
+.item a:hover{
+	color: red;
+}
+.active{
+	color: red;
+}
+</style>
+</head>
+
+<body id="app">
+	<div style="width: 1100px; margin: 0 auto; margin-top: 20px; margin-bottom: 100px;">
+		
+		<div th:include="/pc/shezhang/common/top.html"  style="width: 100%;  overflow: hidden; ">
+		</div>
+		
+		<div id="daohang" th:include="/pc/shezhang/common/daohang.html"  style="width: 100%; height:45px; border-radius: 10px; margin-top:22px; background-color: white;display: flex;display: -webkit-flex; ">
+		</div>
+		<div style="width: 100%; margin-top:22px; border-radius: 10px;  min-height: 500px; ">
+			<!-- 内容展示区域 -->
+			
+			<div class="layui-card">
+		        <div class="layui-card-header" th:text=${title}>卡片面板</div>
+		        <div class="layui-card-body" style="min-height: 300px;">
+					  <div class="layui-table-toolbar" style="margin-bottom: 3px; ">
+							<div class="layui-btn-group">
+							    <button class="layui-btn layui-btn-sm" onclick="reload_data()"><i class="layui-icon">&#xe669;</i>刷新</button>
+						 	 </div>
+						</div>
+						
+						<table class="layui-hide"   id="table" lay-filter="table"></table>
+						
+		        </div>
+		      </div>
+      
+			<!-- 内容展示区域 -->
+		</div>
+	</div>
+</body>
+
+<script type="text/html" id="format_user">
+{{#  if(d.user){ }}
+{{ d.user.trueName}}
+{{#  }    }}
+</script>
+<script type="text/html" id="format_association">
+{{#  if(d.association){ }}
+{{ d.association.name}}
+{{#  }    }}
+</script>
+<script type="text/html" id="format_association_user">
+{{#  if(d.association){ }}
+{{ d.association.user.trueName}}
+{{#  }    }}
+</script>
+
+<script type="text/html" id="format_type">
+{{#  if(d.type==1){ }}
+申请加入社团
+{{#  } else if(d.type==2){   }}
+ 申请退出社团
+{{#   }  }}
+</script>
+
+<script type="text/html" id="format_state">
+{{#  if(d.state==1){ }}
+申请中
+{{#  } else if(d.state==2){   }}
+申请通过 
+{{#  } else if(d.state==3){   }}
+申请失败
+{{#  }     }}
+</script>
+
+<script type="text/html" id="table_bar">
+<div class="layui-btn-group">
+{{#  if(d.state == 1){ }}
+<a class="layui-btn layui-btn-xs" lay-event="adopt">通过</a>
+<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="refuse">驳回</a>
+{{#  }  }}
+</div>
+</script>
+
+<script>
+layui.use([ 'laydate', 'laypage', 'layer', 'table', 'carousel',
+		'upload', 'element' ], function() {
+	var laydate = layui.laydate //日期
+	, laypage = layui.laypage //分页
+	,layer = layui.layer //弹层
+	,form = layui.form 
+	, table = layui.table //表格
+	, carousel = layui.carousel //轮播
+	, upload = layui.upload //上传
+	, element = layui.element; //元素操作
+	  table.render({
+	    elem: '#table'
+	    ,url: '/api/apply/list?associationId=[[${associationId}]]'
+	    ,height: 'full-300'
+	    ,totalRow: true
+		,cols: [ [
+			
+	       {field:'user', title: '申请人', width:120,style:'font-size: 12px;',templet: '#format_user' }
+	       ,{field:'createDateTime', title: '申请时间', width:130,style:'font-size: 12px;'  }
+	       ,{field:'name', title: '社团名称', width:150,style:'font-size: 12px;',templet: '#format_association'   }
+	       ,{field:'user', title: '社长', width:120,style:'font-size: 12px;',templet: '#format_association_user' }
+	       ,{field:'remark', title: '申请附言', width:120,style:'font-size: 12px;'  }
+	       ,{field:'type', title: '申请类型', width:120,style:'font-size: 12px;' ,templet: '#format_type' }
+	       ,{field:'state', title: '申请状态', width:120,style:'font-size: 12px;' ,templet: '#format_state' }
+	       
+	       ,{fixed:'right', width:120,title: '操作',  toolbar: '#table_bar'}
+	       
+	       ] ]
+	    ,id: 'table'
+	    ,page: true
+	    ,limits:[500,1000,2000,3000],
+	   limit:100
+	  });
+	
+	//监听工具条 table_bar
+		table.on('tool(table)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			var data = obj.data //获得当前行数据
+			, layEvent = obj.event; //获得 lay-event 对应的值
+			if (layEvent === 'adopt') {
+				adopt(data.id);
+			}else if (layEvent === 'refuse'){
+				refuse(data.id);
+			}
+		});
+});
+</script>
+
+</html>

@@ -1,0 +1,43 @@
+<meta charset="UTF-8" />
+<div class="fly-card">
+	<div class="fly-card-header">
+		温馨通道
+	</div>
+	
+	<div class="fly-card-body" style="min-height: 100px; ">
+		设计中
+	</div>
+</div>
+
+<div class="fly-card" style="margin-top: 20px; ">
+	<div class="fly-card-header">
+		我的公众号
+	</div>
+	<div class="fly-card-body"  >
+		<img  src="/image/base/gongzhonghao.jpg" />
+	</div>
+</div>
+
+<div class="fly-card" style="margin-top: 20px; ">
+	<div class="fly-card-header">
+		按分类
+	</div>
+	<div class="fly-card-body" style="min-height: 200px; ">
+		<div class="fly-card-data"  th:each="blogType: ${blogTypeList}">
+			<a th:href="@{/type?id=}+${blogType.id}"  th:text="|${blogType.name}(${blogType.count})|"></a>
+		</div>
+	</div>
+</div>
+
+<div class="fly-card" style="margin-top: 20px; ">
+	<div class="fly-card-header">
+		按日期
+	</div>
+	<div class="fly-card-body" style="min-height: 200px; ">
+		
+		<div class="fly-card-data"  th:each="date: ${dateList}">
+			<a th:href="@{/date?date=}+${date.DATE}" th:text="|${date.DATE}(${date.blogCount})|"></a>
+		</div>
+		
+	</div>
+</div>

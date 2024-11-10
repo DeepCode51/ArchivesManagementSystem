@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+ 
+<title th:text="|${application.config.webName} ${title}|"></title>
+
+
+<div th:include="/common/layui"></div>
+<div th:include="/common/jq"></div>
+
+<style>
+* {
+	padding: 0px;
+	margin: 0px;
+}
+body {
+	font-family: 微软雅黑;
+	margin: 0px;
+	padding: 0px;
+	background: url(/image/base/user_login_bg.jpg) center center/cover no-repeat fixed;
+}
+.login-box {
+	/* width: 435px; */
+	width: 470px;
+	/* padding: 0 30px 35px 30px; */
+	padding: 0 0 35px 0;
+	color: #666;
+	border-radius: 4px;
+	box-shadow: 1px 1px 4px #767676;
+	margin: 305px auto 175px auto;
+	position: relative;
+}
+</style>
+
+</head>
+<script>
+$(function() {
+	$("#name").focus();
+});
+function go_login() {
+	var index = layer.load(1, {
+		shade : [ 0.1, '#fff' ]
+	//0.1透明度的白色背景
+	});
+
+	var name = $("#name").val();
+	var password = $("#password").val();
+	var state = $("#state").val();
+	if (name == null || name == "") {
+		layer.closeAll();
+		layer.msg('请输入帐号!');
+		return;
+	}
+	if (password == null || password == "") {
+		layer.closeAll();
+		layer.msg('请输入密码!');
+		return;
+	}
+	
+	$.post('/user/login', {name : name,password : password,state:state}, function(result) {
+		if (result.success) {
+			layer.closeAll();
+			if(state==3){
+				window.location.href = "/student/home";
+			}else{
+				window.location.href = "/user/home";
+			}
+		} else {
+			layer.closeAll();
+			layer.msg(result.msg);
+		}
+	}, 'json');
+}
+</script>
+<body id="app">
+
+	<div class="login-box">
+		<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+			<ul class="layui-tab-title">
+				<li class="layui-this">登录</li>
+			</ul>
+			<div class="layui-tab-content" style="height: 210px;">
+				<div class="layui-tab-item layui-show">
+					<!-- 登录窗口 内容 -->
+					<div class="layui-form" action="">
+						<div class="layui-form-item">
+							<label class="layui-form-label" style="width: 30px;">帐号</label>
+							<div class="layui-input-block" style="margin-left: 60px;">
+								<input type="text" id="name" autocomplete="off"
+									placeholder="请输入帐号"
+									onkeydown="if(event.keyCode==13) $('#password').focus()"
+									class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label" style="width: 30px;">密码</label>
+							<div class="layui-input-block" style="margin-left: 60px;">
+								<input type="password" id="password" autocomplete="off"
+									placeholder="请输入密码"
+									onkeydown="if(event.keyCode==13) go_login()"
+									class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label" style="width: 30px;">角色</label>
+							<div class="layui-input-block" style="margin-left: 60px;">
+								 <select id="state" name="interest" lay-filter="aihao">
+							        <option value="3">学生</option>
+							        <option value="2">社长</option>
+							      </select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block" style="margin-left: 60px;">
+								<button class="layui-btn" onclick="go_login()">登陆</button>
+							</div>
+						</div>
+						
+						<div style="text-align: right;"><a style="color: blue;" href="/pc/user/reg">注册学生</a></div>
+					</div>
+					<!-- 登录窗口 内容 -->
+				</div>
+		 
+			</div>
+		</div>
+	</div>
+
+
+</body>
+
+<script>
+	layui.use([ 'laydate', 'laypage', 'layer', 'table', 'carousel', 'upload',
+			'element' ], function() {
+		var laydate = layui.laydate //日期
+		, laypage = layui.laypage //分页
+		, layer = layui.layer //弹层
+		, table = layui.table //表格
+		, carousel = layui.carousel //轮播
+		, upload = layui.upload //上传
+		, element = layui.element; //元素操作
+
+	});
+</script>
+
+</html>

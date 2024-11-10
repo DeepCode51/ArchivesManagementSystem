@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title th:text="${title}"></title>
+
+<div th:include="/common/layui"></div>
+<div th:include="/common/jq"></div>
+
+<!--添加 vue  支持加载-->
+<script src="/vue/vue.min.js"></script>
+<!--添加 vue  支持加载-->
+
+<style>
+.layui-form-item {
+	margin-bottom: 3px;
+}
+</style>
+
+</head>
+<script>
+	
+$(function(){
+	if("[[${user?.sex}]]"!=""){
+		$("#sex").val([[${user?.sex}]]);
+	}
+});
+
+var save_url = '[[${save_url}]]';
+
+function save() {
+	var index = layer.msg('提交中，请稍候', {
+		icon : 16,
+		time : false,
+		shade : 0.8
+	});
+	var sex = $("#sex").val();
+	
+	$.post(save_url, {name:app.name,trueName:app.trueName, phone:app.phone, remark:app.remark,sex:sex,state:3
+	}, function(result) {
+		if (result.success) {
+			window.parent.closeDlg(result.msg);
+		} else {
+			layer.msg(result.msg);
+		}
+	}, 'json');
+}
+
+</script>
+<body id="app">
+	<div style="padding: 10px;" class="layui-form layui-form-pane" action="">
+	
+			<div class="layui-form-item" th:if="${user!=null}">
+			<label class="layui-form-label">用户名</label>
+			<div class="layui-input-block">
+				<input type="text" style="background-color: #eaeaea;" v-model="name"  disabled="disabled" th:value="${user?.name}"  autocomplete="off"
+					  class="layui-input">
+			</div>
+		</div>
+		
+		<div class="layui-form-item" th:if="${user==null}">
+			<label class="layui-form-label">用户名</label>
+			<div class="layui-input-block">
+				<input type="text" v-model="name" autocomplete="off" placeholder="请输入  用户名"   class="layui-input">
+			</div>
+		</div>
+		
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">学生姓名</label>
+			<div class="layui-input-block">
+				<input type="text"  v-model="trueName" th:value="${user?.trueName}"  autocomplete="off"
+				placeholder="请输入  学生姓名"   class="layui-input">
+			</div>
+		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">性别</label>
+			<div class="layui-input-block">
+				<select id="sex" name="interest" lay-filter="aihao">
+		        <option value="1">男</option>
+		        <option value="2">女</option>
+		      </select>
+			</div>
+		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">电话</label>
+			<div class="layui-input-block">
+				<input type="text"  v-model="phone" th:value="${user?.phone}"  autocomplete="off"
+				placeholder="请输入  电话"   class="layui-input">
+			</div>
+		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">备注</label>
+			<div class="layui-input-block">
+				<input type="text"  v-model="remark" th:value="${user?.remark}"  autocomplete="off"
+				placeholder="请输入  备注"   class="layui-input">
+			</div>
+		</div>
+		
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn"   lay-submit="" lay-filter="demo1"
+					onclick="save()">提交修改</button>
+			</div>
+		</div>
+		
+	</div>
+	
+</body>
+
+<script th:inline="none">
+	layui.use([ 'laydate', 'laypage', 'layer', 'table', 'carousel', 'upload',
+			'element' ], function() {
+		var laydate = layui.laydate //日期
+		, laypage = layui.laypage //分页
+		, layer = layui.layer //弹层
+		, table = layui.table //表格
+		, carousel = layui.carousel //轮播
+		, upload = layui.upload //上传
+		, element = layui.element; //元素操作
+		
+	});
+</script>
+
+<script>
+	var app = new Vue({
+		el : '#app',
+		data : {
+		}
+	});
+</script>
+</html>

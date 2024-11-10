@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+<meta charset="UTF-8">
+<title  >修改档案</title>
+
+<div th:include="/common/layui"></div>
+<div th:include="/common/jq"></div>
+
+
+<script src="/js/houtai/manage_base.js"></script>
+
+<!--添加 vue  支持加载-->
+<script src="/vue/vue.min.js"></script>
+<!--添加 vue  支持加载-->
+
+<!--异步上传 js-->
+<script src="/AjaxFileUpload/ajaxfileupload.js"></script>
+<!--异步上传 js-->
+
+<script>
+//定义在外面。可以代码中  使用 table
+var table;
+layui.use([ 'laydate', 'laypage', 'layer','form', 'table', 'carousel',
+			'upload', 'element' ], function() {
+	table = layui.table;
+});
+
+$(function(){
+	$("#daohang").find("#archive_create").addClass("active");
+});
+
+var luqu ="[[${archive.luqu}]]";
+var tijian ="[[${archive.tijian}]]";
+var gaokao ="[[${archive.gaokao}]]";
+var dengji ="[[${archive.dengji}]]";
+
+function uploadFile(file){
+    $.ajaxFileUpload({
+        url : '/api/archive/add/file', //用于文件上传的服务器端请求地址  
+        secureuri : false, //一般设置为false
+        fileElementId : 'file', //文件上传空间的id属性  <input type="file" id="file" name="file" />  
+        type : 'post',  
+        dataType : 'text', //返回值类型 一般设置为json  
+        success : function(result)//服务器成功响应处理函数  
+        {
+            var result = $.parseJSON(result.replace(/<.*?>/ig,""));
+            if(result.success){
+                console.log(result.path) ;
+                $("#luqu").html(result.path);
+                luqu =result.path;
+            }
+        },
+        error : function(result)//服务器响应失败处理函数  
+        {  
+        }
+    });  
+    return false;
+}
+function uploadFile2(file){
+    $.ajaxFileUpload({
+        url : '/api/archive/add/file2', //用于文件上传的服务器端请求地址  
+        secureuri : false, //一般设置为false
+        fileElementId : 'file2', //文件上传空间的id属性  <input type="file" id="file" name="file" />  
+        type : 'post',  
+        dataType : 'text', //返回值类型 一般设置为json  
+        success : function(result)//服务器成功响应处理函数  
+        {
+            var result = $.parseJSON(result.replace(/<.*?>/ig,""));
+            if(result.success){
+                console.log(result.path) ;
+                $("#tijian").html(result.path);
+                tijian =result.path;
+            }
+        },
+        error : function(result)//服务器响应失败处理函数  
+        {  
+        }
+    });  
+    return false;
+}
+function uploadFile3(file){
+    $.ajaxFileUpload({
+        url : '/api/archive/add/file3', //用于文件上传的服务器端请求地址  
+        secureuri : false, //一般设置为false
+        fileElementId : 'file3', //文件上传空间的id属性  <input type="file" id="file" name="file" />  
+        type : 'post',  
+        dataType : 'text', //返回值类型 一般设置为json  
+        success : function(result)//服务器成功响应处理函数  
+        {
+            var result = $.parseJSON(result.replace(/<.*?>/ig,""));
+            if(result.success){
+                console.log(result.path) ;
+                $("#gaokao").html(result.path);
+                gaokao =result.path;
+            }
+        },
+        error : function(result)//服务器响应失败处理函数  
+        {  
+        }
+    });  
+    return false;
+}
+function uploadFile4(file){
+    $.ajaxFileUpload({
+        url : '/api/archive/add/file4', //用于文件上传的服务器端请求地址  
+        secureuri : false, //一般设置为false
+        fileElementId : 'file4', //文件上传空间的id属性  <input type="file" id="file" name="file" />  
+        type : 'post',  
+        dataType : 'text', //返回值类型 一般设置为json  
+        success : function(result)//服务器成功响应处理函数  
+        {
+            var result = $.parseJSON(result.replace(/<.*?>/ig,""));
+            if(result.success){
+                console.log(result.path) ;
+                $("#dengji").html(result.path);
+                dengji = result.path;
+            }
+        },
+        error : function(result)//服务器响应失败处理函数  
+        {  
+        }
+    });  
+    return false;
+}
+
+function create(){
+	var bianhao = $("#bianhao").val();
+	console.log(bianhao);
+	var userId = $("#userId").val();
+	if(bianhao.length<2){
+		layer.msg('请输入档案编号，最低4位');
+		return;
+	}
+	$.post('/api/archive/update?id=[[${archive.id}]]',{bianhao:bianhao,"user.id":userId,luqu:luqu,tijian:tijian,gaokao:gaokao
+		,dengji:dengji},function(result){
+		if(result.success){
+			layer.closeAll();
+			layer.msg('档案修改成功');
+			
+		}else{
+			layer.closeAll();
+			layer.msg(result.msg);
+		}
+	},'json');
+}
+
+function del(ids){
+	var index = layer.load(1, {
+		  shade: [0.1,'#fff'] //0.1透明度的白色背景
+	});
+	$.post('/api/association/delete',{ids:ids},function(result){
+		if(result.success){
+			layer.closeAll();
+			layer.msg('删除成功');
+			reload_data();
+		}else{
+			layer.closeAll();
+			layer.msg(result.msg);
+		}
+	},'json');
+}
+function refresh_(){
+	location.replace(location.href);
+}
+</script>
+<style>
+/*修改table表格  左右内边框 为0*/
+.layui-table-cell {
+	padding-left: 0px;
+	padding-right: 0px;
+	text-align: center;
+}
+/*修改table表格 左右内边框 为0*/
+</style>
+<style>
+body{
+	background: url(/image/base/home_bg.png) no-repeat center top fixed;
+}
+.item{
+	flex:1;
+	-webkit-flex:1; 
+	text-align: center; 
+	line-height: 45px;
+}
+.item a:hover{
+	color: red;
+}
+.active{
+	color: red;
+}
+</style>
+</head>
+
+<body id="app">
+	<div style="width: 1100px; margin: 0 auto; margin-top: 20px; margin-bottom: 100px;">
+		
+		<div th:include="/pc/admin/common/top.html"  style="width: 100%;  overflow: hidden; ">
+		</div>
+		
+		<div id="daohang" th:include="/pc/admin/common/daohang.html"  style="width: 100%; height:45px; border-radius: 10px; margin-top:22px; background-color: white;display: flex;display: -webkit-flex; ">
+		</div>
+		<div style="width: 100%; margin-top:22px; border-radius: 10px;  min-height: 500px; ">
+			<!-- 内容展示区域 -->
+			
+			<div class="layui-card">
+		        <div class="layui-card-header" >修改档案</div>
+		        <div class="layui-card-body" style="min-height: 300px;">
+
+						 <div class="layui-form" action="">
+				         <!-- <div class="layui-form-item"> <label class="layui-form-label">档案编号</label>
+				          <div class="layui-input-block">
+				           <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入 档案编号" class="layui-input">
+				          </div>
+				         </div> -->
+				         
+				         <div class="layui-form-item">
+				          <div class="layui-inline"> <label class="layui-form-label">学生</label>
+				           <div class="layui-input-inline">
+				              <input type="text" disabled="disabled" style="background-color: #3333;" th:value="${archive.user.trueName}"    class="layui-input">
+				           </div>
+				          </div>
+				          <div class="layui-inline"> <label class="layui-form-label">档案编号</label>
+				           <div class="layui-input-inline">
+				            <input type="text" id="bianhao" th:value="${archive.bianhao}" autocomplete="off"  placeholder="请输入 档案编号" class="layui-input">
+				           </div>
+				          </div>  
+				         </div>
+					 	
+				         <div class="layui-form-item">
+				          <div class="layui-inline"> <label class="layui-form-label">录取通知书</label>
+				           <div class="layui-input-inline">
+				           <input style="border: 0;" type="file" name="file" id="file" onchange ="uploadFile(this)" class="layui-input" />
+				           </div>
+				          </div>
+				          <div class="layui-inline"> <label style="width: 131px;" class="layui-form-label">录取通知书文件地址</label>
+				           <div class="layui-input-inline" style="padding-top: 5px;">
+				            <span id="luqu" th:utext="|<a href='${archive.luqu}'>${archive.luqu}下载</a>|"></span>
+				           </div>
+				          </div>  
+				         </div>
+				         
+				         <div class="layui-form-item">
+				          <div class="layui-inline"> <label class="layui-form-label">体检表</label>
+				           <div class="layui-input-inline">
+				           <input style="border: 0;" type="file" name="file2" id="file2" onchange ="uploadFile2(this)" class="layui-input" />
+				           </div>
+				          </div>
+				          <div class="layui-inline"> <label style="width: 131px;" class="layui-form-label">体检表文件地址</label>
+				           <div class="layui-input-inline" style="padding-top: 5px;">
+				            <span id="tijian" th:utext="|<a href='${archive.tijian}'>${archive.tijian}下载</a>|"></span>
+				           </div>
+				          </div>  
+				         </div>
+				         
+				         <div class="layui-form-item">
+				          <div class="layui-inline"> <label class="layui-form-label">高考档案</label>
+				           <div class="layui-input-inline">
+				           <input style="border: 0;" type="file" name="file3" id="file3" onchange ="uploadFile3(this)" class="layui-input" />
+				           </div>
+				          </div>
+				          <div class="layui-inline"> <label style="width: 131px;" class="layui-form-label">高考档案地址</label>
+				           <div class="layui-input-inline" style="padding-top: 5px;">
+				            <span id="gaokao"  th:utext="|<a href='${archive.gaokao}'>${archive.gaokao}下载</a>  |"></span>
+				           </div>
+				          </div>  
+				         </div>
+				         
+				          <div class="layui-form-item">
+				          <div class="layui-inline"> <label class="layui-form-label">入学登记表</label>
+				           <div class="layui-input-inline">
+				           <input style="border: 0;" type="file" name="file4" id="file4" onchange ="uploadFile4(this)" class="layui-input" />
+				           </div>
+				          </div>
+				          <div class="layui-inline"> <label style="width: 131px;" class="layui-form-label">入学登记表地址</label>
+				           <div class="layui-input-inline" style="padding-top: 5px;">
+				            <span id="dengji" th:utext="|<a href='${archive.dengji}'>${archive.dengji}下载</a>|"></span>
+				           </div>
+				          </div>  
+				         </div>
+				         
+				           <div class="layui-form-item">
+					          <div class="layui-input-block"> 
+					          <button id="create" type="submit" class="layui-btn" onclick="create()" >提交修改</button> 
+					          </div>
+         					</div>
+         
+         
+				        </div>
+         				
+						
+		        </div>
+		      </div>
+      
+			<!-- 内容展示区域 -->
+		</div>
+	</div>
+</body>
+
+<script type="text/html" id="table_bar">
+<div class="layui-btn-group">
+<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="view">查看</a>
+</div>
+</script>
+<script type="text/html" id="format_user">
+{{#  if(d.user){ }}
+{{ d.user.trueName}}
+{{#  }    }}
+</script>
+<script>
+layui.use([ 'laydate', 'laypage', 'layer', 'table', 'carousel',
+		'upload', 'element' ], function() {
+	var laydate = layui.laydate //日期
+	, laypage = layui.laypage //分页
+	,layer = layui.layer //弹层
+	,form = layui.form 
+	, table = layui.table //表格
+	, carousel = layui.carousel //轮播
+	, upload = layui.upload //上传
+	, element = layui.element; //元素操作
+	  table.render({
+	    elem: '#table'
+	    ,url: '/api/association/list'
+	    ,height: 'full-300'
+	    ,totalRow: true
+		,cols: [ [
+	       {checkbox: true, fixed: true}
+	       ,{field:'name', title: '社团名称', width:90,style:'font-size: 12px;'   }
+	       ,{field:'user', title: '社长', width:120,style:'font-size: 12px;',templet: '#format_user' }
+	       ,{field:'createDateTime', title: '创建时间', width:150,style:'font-size: 12px;'  }
+	       ,{fixed:'right', width:120,title: '操作',  toolbar: '#table_bar'}
+	       ] ]
+	    ,id: 'table'
+	    ,page: true
+	    ,limits:[500,1000,2000,3000],
+	   limit:100
+	  });
+	
+	//监听工具条 table_bar
+		table.on('tool(table)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			var data = obj.data //获得当前行数据
+			, layEvent = obj.event; //获得 lay-event 对应的值
+			if (layEvent === 'edit') {
+				edit(data.id);
+			}else if (layEvent === 'view'){
+				view(data.id);
+			}
+		});
+});
+</script>
+
+</html>

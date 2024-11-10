@@ -1,0 +1,346 @@
+/*鍏叡浠ｇ爜 */
+.wrap {
+	min-width: 1200px;
+}
+
+
+.wrap .model {
+}
+
+.wrap .model .content {
+	width: 1200px;
+	margin: 0 auto;
+	position: relative;
+}
+
+
+.blog_title {
+	text-align: center;
+	color: #00a786;
+	font-size: 28px;
+	height: 1.1em;
+	line-height: 1.1em;
+	padding-top: 40px;
+	margin-bottom: 12px;
+	font-weight: 400;
+}
+
+.blog_content {
+	overflow:hidden;
+	padding: 10px 15px 0px 15px;
+}
+
+
+
+.blog_content p {
+	margin-bottom: 15px;
+}
+
+.blog_content img {
+	max-width: 100%;
+    cursor: crosshair;
+}
+/*鍏叡浠ｇ爜 */
+
+/* 椤甸潰搴曢儴css  涓氬姟 鍏充簬鎴戜滑  鑱旂郴鎴戜滑  绉颁负info */
+.food_info {
+	margin-bottom: 20px;
+}
+
+.food_info_item {
+	vertical-align: top;
+	display: inline-block;
+	width: 200px;
+}
+
+.food_info_item h3 {
+	color: white;
+	margin-bottom: 10px;
+	font-size: 17px;
+}
+
+.food_info_item a {
+	color: #848282;
+	display: block;
+	margin-bottom: 5px;
+}
+
+.food_info_item a:hover {
+	text-decoration: underline;
+}
+
+.food_info_item .pic_div {
+	width: 150px;
+}
+
+.food_info_item .pic_div img {
+	width: 100%;
+}
+/* 椤甸潰搴曢儴css  涓氬姟 鍏充簬鎴戜滑  鑱旂郴鎴戜滑  绉颁负info */
+
+/* 鍙嬫儏 閾炬帴  css */
+.link_list {
+	
+}
+
+.link_list a {
+	white-space: nowrap;
+	color: #848282;
+	line-height: 33px;
+	padding: 0px 11px 0px 11px;
+}
+
+.link_list a:hover {
+	text-decoration: underline;
+}
+/* 鍙嬫儏 閾炬帴  css */
+
+/* 鍩虹妯″潡 */
+.base_module {
+	width: 390px;
+	float: left;
+	margin-right: 7px;
+	border: 1px solid #dadada;
+	border-radius: 5px;
+	margin-bottom: 7px;
+}
+
+.m-tab {
+	padding: 12px 15px;
+	position: relative;
+	background-color: #FFF;
+	border-radius: 5px;
+}
+
+.m-tab-title {
+	border-bottom: 1px solid #EAEAEA;
+	overflow: hidden;
+}
+
+.m-tab-title h3 {
+	display: inline-block;
+	border-bottom: 3px solid #00a786;
+	height: 32px;
+	line-height: 32px;
+	font-size: 16px;
+	float: left;
+	margin-bottom: -1px;
+}
+
+.m-tab-title-act {
+	float: right;
+	display: inline;
+	margin-top: 4px;
+}
+
+.m-tab-title-act a {
+	padding-left: 14px;
+	position: relative;
+	margin-left: 10px;
+	height: 25px;
+	line-height: 25px;
+	color: #999;
+	font-size: 13px;
+}
+
+.m-tab-title-act  i {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	margin-top: -6px;
+	width: 11px;
+	height: 11px;
+	font-size: 0;
+	background-image: url(/static/images/pc/base/global.png);
+	background-position: -182px -64px;
+}
+
+.m-tab-title-act:HOVER a {
+	color: #00a786;
+}
+
+.m-tab-title-act:hover i {
+	background-position: -182px -79px;
+}
+
+.m-tab-content {
+	min-height: 312px;
+}
+
+.m-tab-content ul {
+	padding: 12px 0 0;
+}
+
+.m-tab-content ul li {
+	height: 30px;
+	line-height: 30px;
+	padding-left: 8px;
+	position: relative;
+	overflow: hidden;
+}
+
+.m-tab-content ul li i {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	width: 4px;
+	height: 4px;
+	background-color: #00a786;
+	margin-top: -2px;
+}
+
+.m-tab-content span {
+	float: right;
+	font-size: 12px;
+	color: #999;
+	margin-left: 9px;
+}
+
+.m-tab-content a {
+	height: 30px !important;
+	overflow: hidden !important;
+}
+
+.m-tab-content a:HOVER {
+	text-decoration: underline !important;
+	color: #00a786 !important;
+}
+
+/* 鍩虹妯″潡 */
+
+
+/* 文章列表模块css */
+.fly-card{
+	overflow:hidden;
+	width: 100%; 
+	border-radius:4px;
+	background-color: #ffffff; 
+}
+.fly-card-header{
+	border-bottom: 1px solid #e6e6e6; 
+	line-height: 50px; 
+	padding-left:10px; 
+	padding-right: 10px; 
+	color: #0a0a0a; 
+	font-size: 14px; 
+}
+.fly-card-body{
+	padding: 10px 10px 10px 10px;
+}
+
+/* 我的二维码 */
+.fly-card-body img{
+	width: 100%;
+}
+/* 我的二维码 */
+
+
+/* 分类和日期分组css */
+.fly-card-data{
+	padding: 3px 5px 3px 5px;
+}
+.fly-card-data a{
+	color: #1e9fff; 
+	font-size: 15px; 
+	letter-spacing: 1px;
+}
+.fly-card-data a:hover{
+	color: #5FB878; 
+}
+/* 分类和日期分组css */
+
+
+.fly-list{
+	padding: 0px 0px 0px 0px;
+}
+.fly-list-item{
+	overflow: hidden;
+	padding: 10px  0px 10px 0px;   
+	border-bottom: 1px solid #9e9e9e14;
+}
+
+.fly-head{
+	width: 63px;
+	float: left;
+	/* background-color: #673ab714; */
+}
+.fly-head img{
+	width: 45px; 
+	height: 45px;
+	border-radius: 2px;
+}
+.fly-right{
+	width:80px;
+	float: left;
+	/* background-color: #9e9e9e08;  */
+}
+
+.fly-right span{
+	text-align:right;
+	display: block;
+	margin-top: 34px;
+	font-size: 13px;
+	color: #666;
+	white-space:nowrap;
+}
+
+.fly-list-type{
+	vertical-align: top;
+    display: inline-block;
+	top: -2px;
+	height: 16px;
+	line-height: 16px;
+	padding: 0 5px;
+	margin-right: 10px;
+	font-size: 12px;
+	border: 1px solid #5FB878;
+	background: none;
+	color: #5FB878;
+}
+.fly-list-type:hover{
+	color: #5FB878;
+}
+.fly-list-title{
+	vertical-align: top;
+	color: #333;
+	white-space: nowrap;
+    text-overflow: ellipsis;
+	width:590px;
+	overflow: hidden;
+	display: inline-block;
+}
+.fly-list-title:hover{
+	color: #009688;
+	text-decoration:underline;
+}
+.fly-list-name{    
+color: #999;
+}
+.fly-list-name:hover{    
+color: #5FB878;
+}
+.fly-list-time{
+	margin-left: 21px;    
+	color: #999;
+}
+/* 文章列表模块css */
+
+/* b站登录按钮 */
+.b_btn{
+	    border: 1px solid #1b5247;
+    color: #fff;
+    background-color: #009688;
+	    border-radius: 2px;
+    width: 184px;
+    line-height: 38px;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+	display: inline-block;
+    height: 36px;
+}
+.b_btn:hover{
+	color: #fff;
+	background: #00bee7;
+}
+/* b站登录按钮 */

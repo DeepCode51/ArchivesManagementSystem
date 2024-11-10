@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+ 
+
+<div th:include="/common/layui"></div>
+<div th:include="/common/jq"></div>
+
+<style>
+* {
+	padding: 0px;
+	margin: 0px;
+}
+body {
+	font-family: 微软雅黑;
+	margin: 0px;
+	padding: 0px;
+	background: url(/image/base/user_login_bg.jpg) center center/cover no-repeat fixed;
+}
+.login-box {
+	/* width: 435px; */
+	width: 470px;
+	/* padding: 0 30px 35px 30px; */
+	padding: 0 0 35px 0;
+	color: #666;
+	border-radius: 4px;
+	box-shadow: 1px 1px 4px #767676;
+	margin: 305px auto 175px auto;
+	position: relative;
+}
+</style>
+
+</head>
+<script>
+
+function reg(){
+		var index = layer.msg('提交中，请稍候',{icon: 16,time:false,shade:0.8});
+		
+		var name = $("#name").val();
+		var trueName = $("#trueName").val();
+		var phone = $("#phone").val();
+		var sex = $("#sex").val();
+		var pwd = $("#pwd").val();
+		
+		if(name.length<3){
+			layer.closeAll();
+			layer.msg('帐号必须4位以上', {icon: 2});return;
+		}
+		if(trueName.length<1){
+			layer.closeAll();
+			layer.msg('请输入真实姓名', {icon: 2});return;
+		}
+		if(phone.length<5){
+			layer.closeAll();
+			layer.msg('请输入电话', {icon: 2});return;
+		}
+		if(pwd.length<5){
+			layer.closeAll();
+			layer.msg('请输入6位以上的密码', {icon: 2});return;
+		}
+		
+		$.post('/user/add', {name : name,trueName:trueName,phone:phone,sex:sex,pwd :pwd
+		}, function(result) {
+			if (result.success) {
+				layer.closeAll();
+				layer.msg('注册成功', {icon: 1});
+				
+				$("#reg_btn").attr("onclick","void();"); 
+				$("#reg_btn").text("注册成功");
+			} else {
+				layer.closeAll();
+				layer.alert(result.msg);
+			}
+		}, 'json');
+	}
+</script>
+<body id="app">
+
+	<div class="login-box">
+		<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+			<ul class="layui-tab-title">
+				<li class="layui-this" th:text="${title}">xxxx</li>
+			</ul>
+			<div class="layui-tab-content " style="height: 260px;">
+				 
+				<div class="layui-tab-item layui-show">
+					<!-- 注册窗口 内容 -->
+					<div class="layui-form" action="">
+						<div class="layui-form-item">
+							<label class="layui-form-label" style="width: 75px;">注册帐号</label>
+							<div class="layui-input-block" style="margin-left: 110px;">
+								<input type="text" id="name" autocomplete="off"
+									placeholder="请输入注册帐号"
+									onkeydown="if(event.keyCode==13) $('#password').focus()"
+									class="layui-input">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label" style="width: 75px;">注册密码</label>
+							<div class="layui-input-block" style="margin-left: 110px;">
+								<input type="password" id="pwd" autocomplete="off"
+									placeholder="请输入注册密码"
+									onkeydown="if(event.keyCode==13) go_login()"
+									class="layui-input">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label" style="width: 75px;">注册姓名</label>
+							<div class="layui-input-block" style="margin-left: 110px;">
+								<input type="text" id="trueName" autocomplete="off"
+									placeholder="请输入注册姓名"
+									onkeydown="if(event.keyCode==13) $('#password').focus()"
+									class="layui-input">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label" style="width: 75px;">性别</label>
+							<div class="layui-input-block" style="margin-left: 110px;">
+								 <select id="sex" name="interest" lay-filter="aihao">
+							        <option value="1">男</option>
+							        <option value="2">女</option>
+							      </select>
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label" style="width: 75px;">注册电话</label>
+							<div class="layui-input-block" style="margin-left: 110px;">
+								<input type="text" id="phone" autocomplete="off"
+									placeholder="请输入注册电话"
+									onkeydown="if(event.keyCode==13) $('#password').focus()"
+									class="layui-input">
+							</div>
+						</div>
+						
+						
+						<div class="layui-form-item">
+							<div class="layui-input-block" style="margin-left: 60px;">
+								<button class="layui-btn" id="reg_btn" onclick="reg()">提交注册</button>
+							</div>
+						</div>
+						
+						<div style="text-align: right;"><a style="color: blue;" href="/pc/user/login">我要登录</a></div>
+						
+					</div>
+					<!--注册窗口 内容 -->
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+
+<script>
+	layui.use([ 'laydate', 'laypage', 'layer', 'table', 'carousel', 'upload',
+			'element' ], function() {
+		var laydate = layui.laydate //日期
+		, laypage = layui.laypage //分页
+		, layer = layui.layer //弹层
+		, table = layui.table //表格
+		, carousel = layui.carousel //轮播
+		, upload = layui.upload //上传
+		, element = layui.element; //元素操作
+
+	});
+</script>
+
+</html>

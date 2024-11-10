@@ -1,0 +1,14 @@
+<meta charset="UTF-8" />
+<div class="content" style="    background-color: #f5f5f5; overflow: hidden;">
+		<div style="display: inline-block; float: right; padding-top: 5px; padding-bottom: 5px;">
+			<a  th:if="${#bools.isTrue(session.member==null)}" href="/member/login">登录</a>
+			<a  th:if="${#bools.isTrue(session.member==null)}" href="/member/reg">注册</a>
+			
+			<span th:if="${#bools.isTrue(session.member!=null)}"  style="d " th:utext="|欢迎【${session.member?.trueName}】登录|">欢迎XXX登录</span>
+			
+			<a th:if="${#bools.isTrue(session.member!=null)}" href="/member/home" style=" margin-left:10px;  color: #2196F3;">个人中心</a>
+			<a th:if="${#bools.isTrue(session.member!=null)}" href="/member/logout" style=" margin-left:10px;  color: red;">退出登录</a>
+		</div>
+	</div>
+	
+	

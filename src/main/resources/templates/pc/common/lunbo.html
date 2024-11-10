@@ -1,0 +1,9 @@
+<meta charset="UTF-8" />
+<div class="layui-carousel" id="lunbo" lay-filter="lunbo">
+				<div carousel-item="">
+					<div th:each="lunbo: ${lunboList}">
+						<a style="display: block;" th:href="|${lunbo.url}|"><img
+							th:src="${lunbo.imageUrl}" /></a>
+					</div>
+				</div>
+			</div>

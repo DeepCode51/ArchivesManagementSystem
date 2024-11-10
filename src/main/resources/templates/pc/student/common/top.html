@@ -1,0 +1,18 @@
+<meta charset="UTF-8" />
+
+<div style="text-align: right;">
+	<a href="/student/logout">注销登录</a>
+</div>
+
+<div  style="width: 100%; height:250px; background-color: gray; background: url(/image/base/bg.png) no-repeat;   background-size: 100%; ">
+	<div style="overflow: hidden; padding-top: 22px; ">
+			<img style="width: 90px; margin: 0 auto; display: block; border-radius: 40px; margin-top: 22px;" src="/image/base/default_head_img.jpg" />
+	</div>
+		<div style="text-align: center; color: white; font-weight: bold;" th:text="|姓名：${session.currentUser.trueName}|">姓名：xxx </div>
+	<div style="text-align: center; color: white;" th:text="|电话：${session.currentUser.phone}|"></div>
+	<div style="text-align: center; color: white;">职务：学生</div>		
+	
+</div>		
+
+
+

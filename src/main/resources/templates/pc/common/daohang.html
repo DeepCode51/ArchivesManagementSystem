@@ -1,0 +1,33 @@
+<meta charset="UTF-8" />
+
+<script>
+function search(){
+	var q = $("#q").val();
+	if(q.length<1){
+		alert('请输入搜索内容');
+		return null;
+	}
+	window.location.href='/article/search?q='+q;
+}
+</script>
+
+<!-- <a href="/index" style="position: absolute; left: 15px; top: 11px;">
+	<img src="/image/logo.png" />
+</a> -->
+
+<ul class="layui-nav" style="margin-left: 0px;">
+  <li th:each="nav : ${application.navList}"  class="layui-nav-item">
+  	<a th:href="|${nav.url}|" th:text="${nav.name}"></a>
+  	
+  	<dl th:if="${not #lists.isEmpty(nav.child)}" class="layui-nav-child">
+      <dd th:each="item : ${nav.child}"><a th:href="|${item.url}|"  th:text="${item.name}">选项1</a></dd>
+    </dl>
+  </li>
+</ul>
+
+<ul style="position: absolute;  top: 0; right: 0;"  class="layui-nav fly-nav-user">       
+	<li class="layui-nav-item">
+		<input th:value="${q}"  onkeydown="if(event.keyCode==13) search()" id="q" style="background-color: #dedede; height: 34px;" type="text" />
+		<button onclick="search()" type="button" class="layui-btn layui-btn-primary">搜索</button>
+	</li>
+</ul>

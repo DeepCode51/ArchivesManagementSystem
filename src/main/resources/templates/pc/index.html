@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title th:text="|${application.config.webName} ${title}|"></title>
+
+<div th:include="/common/jq"></div>
+<div th:include="/common/layui"></div>
+
+<link rel="stylesheet" href="/css/pc/base.css">
+
+<style>
+.item{
+	overflow: hidden; 
+	width: 24%; 
+	float: left; 
+	margin-left: 5px; 
+	margin-bottom: 15px;
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+<div class="model" style="overflow: hidden; background-color: #f5f5f5; " th:include="/pc/common/top.html" >
+</div>
+
+<!-- 导航 -->
+<div class="model" style="background-color:#393d49; overflow:hidden;"    >
+	<div class="content" style=" overflow:hidden;  background-color: #393d49;" th:include="/pc/common/daohang.html">
+	</div>
+</div>
+<!-- 导航 -->
+
+<!-- 轮播 -->
+<div class="model" style="background-color: white;"    >
+	<div class="content" style=" width:100%;  background-color: white;" th:include="/pc/common/lunbo.html">
+	</div>
+</div>
+<!-- 导航 -->
+
+<div class="model" style="    background-color: #7b61ce;"    >
+	<div class="content" style="    background-color: #7b61ce; padding: 20px 0px 20px 0px; overflow: hidden;" >
+		<h1 style="text-align: center; color: white; padding: 0px 0px 20px 0px;">精选资料</h1>
+		<div style="overflow: hidden; text-align: center;">
+			<a th:href="|${lunbo.url}|" style="width: 25%;display:inline-block;   margin-left: 15px;" th:each="lunbo: ${lunboList2}">
+				<img style="width: 100%;" th:src="${lunbo.imageUrl}" >
+			</a>
+		</div>
+	</div>
+</div>
+
+<div class="model" style="  background: #f8f8f8;"    >
+	<div class="content" style=" background: #f8f8f8; padding: 20px 0px 20px 0px; overflow: hidden;" >
+		
+		<div style="overflow: hidden; margin-bottom: 25px; min-height: 360px;"  >
+			<span style="letter-spacing: 4px; display: inline-block; border-bottom: 3px solid red; padding: 10px 10px 15px 10px; font-weight: bold;" >
+				<a    >热门资料</a>
+			</span>
+			<div style="overflow: hidden; padding:10px 0px 15px 0px; ">
+				<div class="item"   th:each="item: ${articleList}" >
+					<a style="display: block;" th:href="|/article/${item.id}|"  >
+						<img style="width: 100%;" th:src="${item.imageUrl}">
+					</a>
+					<div style="background-color: white; padding: 8px 5px 8px 5px; color: #8c8c8c; ">
+						
+						<div style="border-bottom: 1px solid #d4d4d4; padding-bottom: 5px; height: 44px; overflow: hidden;">
+							<a th:href="|/article/${item.id}|" th:text="|${item.title}|"></a>
+						</div>
+						
+						<div style="overflow: hidden; padding-top: 5px;">
+						
+						
+							<span style="display: inline-block; float: left; font-size: 13px;" th:text="|发布人:${item.member.trueName}|">发布人：小明</span>
+							
+							<span style="display: inline-block; float: left;font-size: 13px; margin-left:13px;" th:text="|点赞:${item.zan}|">点赞：11</span>
+							
+							<span style="display: inline-block; float: right; font-size: 13px;" th:text="${#dates.format(item.createDateTime, 'yyyy-MM-dd HH:mm')}">xxxx-88-55 41:11</span>
+							
+							
+						</div>
+					</div>
+				</div>
+				
+				
+			</div>
+		</div>
+		
+	</div>
+</div>
+
+<div class="model" style="  background: white;" th:include="/pc/common/foot.html"    >
+</div>
+
+
+</div><!-- wrap -->
+</body>
+<script>
+	layui.use([ 'laydate', 'laypage', 'layer', 'table', 'carousel', 'upload',
+			'element' ], function() {
+		var laydate = layui.laydate //日期
+		, laypage = layui.laypage //分页
+		, layer = layui.layer //弹层
+		, table = layui.table //表格
+		, carousel = layui.carousel //轮播
+		, upload = layui.upload //上传
+		, element = layui.element; //元素操作
+
+		//常规轮播
+		carousel.render({
+			elem : '#lunbo',
+			width : '100%',
+			height : '450px',
+			arrow : 'always'
+		});
+
+	});
+</script>
+</html>
